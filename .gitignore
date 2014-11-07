@@ -16,6 +16,8 @@ project/plugins/project/
 .scala_dependencies
 .worksheet
 .settings/
+.project
+.classpath
 /bin
 largeUF.txt
 leipzig1M.txt
