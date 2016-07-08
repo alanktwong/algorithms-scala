@@ -5,18 +5,25 @@ import Keys._
 object BuildSettings {
   val buildProject      = "algorithms-scala"
   val buildOrganization = "org.awong"
-  val buildVersion      = "0.0.1-SNAPSHOT"
-  val buildScalaVersion = "2.10.1"
-  val javaVersion       = "1.7"
+  val buildVersion      = "0.0.2-SNAPSHOT"
+  val buildScalaVersion = "2.11.8"
+  val javacVersion      = "1.8"
 
   val buildSettings = Defaults.defaultSettings ++ Seq (
     organization  := buildOrganization,
     version       := buildVersion,
     scalaVersion  := buildScalaVersion,
     scalacOptions ++= Seq("-unchecked", "-deprecation"),
-    javacOptions  ++= Seq("-target", javaVersion, "-source", javaVersion),
+    javacOptions  ++= Seq("-target", javacVersion, "-source", javacVersion, "-Xlint"),
     shellPrompt  := ShellPrompt.buildShellPrompt,
+    parallelExecution in Test := false,
     licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
+    initialize := {
+      val _ = initialize.value
+      if (sys.props("java.specification.version") != "1.8") {
+        sys.error("Java 8 is required for this project.")
+      }
+    },
     pomExtra := (
       <scm>
         <url>git@github.com:algorithms-scala/reboot.git</url>
@@ -77,18 +84,18 @@ object Resolvers {
 }
 
 object Versions {
-  lazy val javaVersion        = BuildSettings.javaVersion
+  lazy val javaVersion        = BuildSettings.javacVersion
   lazy val scalaVersion       = BuildSettings.buildScalaVersion
   lazy val twitterUtilVersion = "6.12.1"
-  lazy val slf4jVersion       = "1.6.4"
+  lazy val slf4jVersion       = "1.7.5"
   lazy val logbackVersion     = "1.0.7"
   lazy val configVersion      = "1.2.1"
-  lazy val scalazVersion      = "7.0.6"
+  lazy val scalazVersion      = "7.1.0"
     
   lazy val junitVersion       = "4.11"
   lazy val mockitoVersion     = "1.9.5"
-  lazy val scalaTestVersion   = "2.0"
-  lazy val specs2Version      = "2.3.13"
+  lazy val scalaTestVersion   = "2.2.6"
+  lazy val specs2Version      = "2.4"
   lazy val scalaCheckVersion  = "1.11.3"
 }
 
@@ -139,8 +146,11 @@ object Dependencies {
   lazy val scalazCore     = "org.scalaz"             %% "scalaz-core"  %  scalazVersion
   lazy val typesafeConfig = "com.typesafe"           %  "config"       %  configVersion
   lazy val rxScala        = "com.netflix.rxjava"     %  "rxjava-scala" %  "0.15.0"
-  lazy val scalaAsync     = "org.scala-lang.modules" %% "scala-async"  %  "0.9.0-M2"
-  lazy val scalaSwing     = "org.scala-lang"         %  "scala-swing"  %  scalaVersion
+  lazy val scalaSwing     = "org.scala-lang"         %  "scala-swing"  %  "2.11.0-M7"
+
+  lazy val scalaAsync             = "org.scala-lang.modules" %% "scala-async"              %  "0.9.5"
+  lazy val scalaParserCombinators = "org.scala-lang.modules" %% "scala-parser-combinators" %  "1.0.4"
+  lazy val scalaPickling          = "org.scala-lang.modules" %% "scala-pickling"           %  "0.10.1"
 
   lazy val stdlibDependencies      = Seq(scalaSwing, typesafeConfig, scalazCore, rxScala, scalaAsync) ++ testDependencies ++ slf4jDependencies ++ apacheCommonsDependencies
   lazy val fundamentalDependencies = stdlibDependencies
