@@ -1,7 +1,6 @@
 package org.awong.strings
 
 package object regex {
-	object GREP
-	object NFA
-
+  object GREP
+  object NFA
 }

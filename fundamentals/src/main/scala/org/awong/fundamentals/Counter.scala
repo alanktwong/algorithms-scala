@@ -20,29 +20,29 @@ package org.awong.fundamentals
  *
  *************************************************************************/
 case class Counter(name: String, count: Int = 0) extends math.Ordered[Counter] {
-	def increment: Counter = Counter(name, count + 1)
-	
-	def tally: Int = count
-	
-	def compare(that: Counter): Int = {
-		if (this.count < that.count) {
-			-1
-		} else if (this.count > that.count) {
-			+1;
-		} else {
-			0
-		}
-	}
-	
-	override def toString: String = {
-		 count + " " + name;
-	}
+  def increment: Counter = Counter(name, count + 1)
+
+  def tally: Int = count
+
+  def compare(that: Counter): Int = {
+    if (this.count < that.count) {
+      -1
+    } else if (this.count > that.count) {
+      +1;
+    } else {
+      0
+    }
+  }
+
+  override def toString: String = {
+     count + " " + name;
+  }
 }
 
 object Counter {
-	def apply(name: String): Counter = new Counter(name, 0)
-	
-	def test(n: Int, t: Int): Seq[Counter] = {
-		???
-	}
+  def apply(name: String): Counter = new Counter(name, 0)
+
+  def test(n: Int, t: Int): Seq[Counter] = {
+    ???
+  }
 }

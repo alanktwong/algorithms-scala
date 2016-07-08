@@ -28,8 +28,8 @@ package org.awong.fundamentals
 import java.io.File
 
 object Cat {
-	def concat(files: File*): File = {
-		concat(files.toBuffer)
-	}
-	def concat(files: Iterable[File]): File = ???
+  def concat(files: File*): File = {
+    concat(files.toBuffer)
+  }
+  def concat(files: Iterable[File]): File = ???
 }

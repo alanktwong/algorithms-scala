@@ -29,11 +29,11 @@ import java.io.{File => JFile}
  *
  *************************************************************************/
 object Shuffle {
-	def execute(file: JFile): Seq[String] = {
-		???
-	}
-	
-	def execute[T](ins: Seq[T]): Seq[T] = {
-		???
-	}
+  def execute(file: JFile): Seq[String] = {
+    ???
+  }
+
+  def execute[T](ins: Seq[T]): Seq[T] = {
+    ???
+  }
 }

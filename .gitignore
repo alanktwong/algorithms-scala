@@ -23,3 +23,6 @@ largeUF.txt
 leipzig1M.txt
 algorithms-scala.sublime-project
 algorithms-scala.sublime-workspace
+
+.idea/
+.idea_modules/
