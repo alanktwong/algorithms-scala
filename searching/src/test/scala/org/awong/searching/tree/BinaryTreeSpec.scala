@@ -55,7 +55,7 @@ class BinaryTreeSpec extends AbstractWordSpec {
     }
 
     "have correct subtree functionality" in {
-      var tree = BinarySearchTree(Seq(2,1,3))
+      val tree = BinarySearchTree(Seq(2,1,3))
       val subtree = tree.subtree(1)
       subtree.isEmpty should be (false)
       subtree.left.isEmpty should be (true)

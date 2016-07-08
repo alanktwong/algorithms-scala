@@ -43,7 +43,7 @@ object FundamentalsData extends org.awong.stdlib.ModuleData {
   }
 
   def get1Kints(): Seq[Int] = {
-    resourceAsInts("1Kints.txt")
+    resourceAsInts("/1Kints.txt")
   }
 
   def tinyT: Array[Int] = {

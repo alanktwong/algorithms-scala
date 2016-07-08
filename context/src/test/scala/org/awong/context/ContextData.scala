@@ -28,12 +28,12 @@ object ContextData extends org.awong.stdlib.ModuleData {
   }
 
   def brownian: Seq[String] = {
-    resourceAsStrings("brownian.txt")
+    resourceAsStrings("/brownian.txt")
   }
   def diffusion: Seq[String] = {
-    resourceAsStrings("diffusion.txt")
+    resourceAsStrings("/diffusion.txt")
   }
   def mobydick: Seq[String] = {
-    resourceAsStrings("mobydick.txt")
+    resourceAsStrings("/mobydick.txt")
   }
 }

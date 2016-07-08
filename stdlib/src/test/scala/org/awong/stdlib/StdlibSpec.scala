@@ -11,7 +11,7 @@ class StdlibSpec extends AbstractWordSpec {
       Defaults.defaultEncoding should equal ("UTF-8")
     }
     "be able to read a txt file in its local src/main/resources directory" in {
-      StdlibData.resourceAsString("numbers.txt") match {
+      StdlibData.resourceAsString("/numbers.txt") match {
         case Some(source) =>
           (source.mkString) should equal("1 2 3 4 5")
         case None =>
@@ -19,12 +19,12 @@ class StdlibSpec extends AbstractWordSpec {
       }
     }
     "be able to read a txt file in its local src/main/resources directory as a seq" in {
-      val seq = StdlibData.resourceAsStrings("inTest.txt")
+      val seq = StdlibData.resourceAsStrings("/inTest.txt")
       seq should have size 2
     }
 
     "be able to read a txt file in its local src/main/resources directory as an observable stream of lines" in {
-      val maybeObservable = StdlibData.resourceAsObservable("numbers.txt")
+      val maybeObservable = StdlibData.resourceAsObservable("/numbers.txt")
       maybeObservable match {
         case util.Success(observable) => {
           var buffer = scala.collection.mutable.Buffer[String]()

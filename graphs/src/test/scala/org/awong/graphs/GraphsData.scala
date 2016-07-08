@@ -292,14 +292,14 @@ object GraphsData extends org.awong.stdlib.ModuleData {
 
 
   def mediumEWD: Seq[String] = {
-    resourceAsStrings("mediumEWD.txt")
+    resourceAsStrings("/mediumEWD.txt")
   }
 
   def mediumEWG: Seq[String] = {
-    resourceAsStrings("mediumEWG.txt")
+    resourceAsStrings("/mediumEWG.txt")
   }
   def mediumG: Seq[String] = {
-    resourceAsStrings("mediumG.txt")
+    resourceAsStrings("/mediumG.txt")
   }
 
   def movies = {

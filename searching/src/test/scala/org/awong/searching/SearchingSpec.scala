@@ -41,7 +41,6 @@ class SearchingSpec extends AbstractWordSpec {
     "read movies.txt correctly" in {
       SearchingData.movies should have size (4188)
     }
-
   }
 
   "SequentialSearchBST" should {

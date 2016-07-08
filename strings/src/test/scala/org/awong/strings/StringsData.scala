@@ -19,11 +19,11 @@ object StringsData extends org.awong.stdlib.ModuleData {
   }
 
   def genomeVirus: Option[String] = {
-    StdlibData.resourceAsString("genome.txt")
+    StdlibData.resourceAsString("/genome.txt")
   }
 
   def pi: Option[String] = {
-    StdlibData.resourceAsString("pi.txt")
+    StdlibData.resourceAsString("/pi.txt")
   }
 
   def medTale: Seq[String] = {

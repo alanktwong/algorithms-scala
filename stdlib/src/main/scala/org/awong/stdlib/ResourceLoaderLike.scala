@@ -1,6 +1,6 @@
 package org.awong.stdlib
 
-import java.io.{File => JFile}
+import java.io.{File => JFile, InputStream}
 import rx.lang.scala.Observable
 import scala.util.{Try, Success, Failure}
 
@@ -51,7 +51,10 @@ trait ResourceLoaderLike { this: org.awong.Logging =>
   }
 
   def resourceAsSource(filename: String): Option[io.Source] = {
-    for (file <- resourceAsFile(filename)) yield io.Source.fromFile(file, Defaults.defaultEncoding)
+    val stream: InputStream = getClass.getResourceAsStream(filename)
+    //for (file <- resourceAsFile(filename)) yield io.Source.fromFile(file, Defaults.defaultEncoding)
+    val source = io.Source.fromInputStream(stream, Defaults.defaultEncoding)
+    Some(source)
   }
 
   private def readFile[A](file: JFile)(handler: Iterator[String] => A): Try[A] = {

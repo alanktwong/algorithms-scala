@@ -22,7 +22,7 @@ object SearchingData extends org.awong.stdlib.ModuleData {
   }
 
   def tale: Seq[String] = {
-    StdlibData.resourceAsStrings("movies.txt")
+    StdlibData.resourceAsStrings("/tale.txt")
   }
 
   def listTxt: String = {
@@ -170,9 +170,9 @@ chronicle among the restalong the roads that lay before them"""
   }
 
   def movies: Seq[String] = {
-    StdlibData.resourceAsStrings("movies.txt")
+    StdlibData.resourceAsStrings("/movies.txt")
   }
   def leipzig1M: Seq[String] = {
-    StdlibData.resourceAsStrings("leipzig1M.txt")
+    StdlibData.resourceAsStrings("/leipzig1M.txt")
   }
 }
