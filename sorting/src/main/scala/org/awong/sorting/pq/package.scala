@@ -1,6 +1,6 @@
 package org.awong.sorting
 
 package object pq {
-	object Multiway
-	object TopM
+  object Multiway
+  object TopM
 }
