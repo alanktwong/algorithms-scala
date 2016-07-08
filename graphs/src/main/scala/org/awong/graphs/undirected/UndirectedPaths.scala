@@ -7,150 +7,149 @@ import collection.mutable.Queue
 
 
 abstract class UndirectedPaths[V](graph: Graph[V], start: V) {
-	
-	protected var markedMap = initMarkedMap()
-	
-	protected def initMarkedMap(): MMap[V, Boolean] = {
-			graph.vertices.foldLeft(MMap[V,Boolean]()){ case (map,key) =>
-			map + (key -> false)
-		}
-	}
-	
-	protected def marked(vertex: V, mark: Boolean): Unit = {
-		markedMap = markedMap + (vertex -> mark)
-	}
-	
-	def marked(vertex: V): Boolean = {
-		markedMap.getOrElse(vertex, false)
-	}
-	
-	def hasPathTo(vertex: V): Boolean = {
-		marked(vertex)
-	}
+  protected var markedMap = initMarkedMap()
+
+  protected def initMarkedMap(): MMap[V, Boolean] = {
+      graph.vertices.foldLeft(MMap[V,Boolean]()){ case (map,key) =>
+      map + (key -> false)
+    }
+  }
+
+  protected def marked(vertex: V, mark: Boolean): Unit = {
+    markedMap = markedMap + (vertex -> mark)
+  }
+
+  def marked(vertex: V): Boolean = {
+    markedMap.getOrElse(vertex, false)
+  }
+
+  def hasPathTo(vertex: V): Boolean = {
+    marked(vertex)
+  }
 }
 
 
 abstract class UndirectedEdges[V](graph: Graph[V], start: V) extends UndirectedPaths[V](graph, start) {
-	protected var edgeTo = MMap[V,V]()
+  protected var edgeTo = MMap[V,V]()
 
-	protected def addEdgeTo(w: V, v: V): Unit = {
-		edgeTo = edgeTo + (w -> v)
-	}
-	
-	def pathTo(v: V): Iterable[V] = {
-		def loop(vertex: V, seq: Seq[V]): Seq[V] = {
-			edgeTo.get(vertex) match {
-				case Some(x) if x != start => {
-					loop(x, x +: seq)
-				}
-				case _ => seq
-			}
-		}
-		if (!hasPathTo(v)) {
-			Seq[V]()
-		} else {
-			val paths = loop(v, Seq[V]())
-			start +: paths
-		}
-	}
+  protected def addEdgeTo(w: V, v: V): Unit = {
+    edgeTo = edgeTo + (w -> v)
+  }
+
+  def pathTo(v: V): Iterable[V] = {
+    def loop(vertex: V, seq: Seq[V]): Seq[V] = {
+      edgeTo.get(vertex) match {
+        case Some(x) if x != start => {
+          loop(x, x +: seq)
+        }
+        case _ => seq
+      }
+    }
+    if (!hasPathTo(v)) {
+      Seq[V]()
+    } else {
+      val paths = loop(v, Seq[V]())
+      start +: paths
+    }
+  }
 }
 
 /**
  * simple dfs that marks vertices
  */
 class DepthFirstSearch[V](graph: Graph[V], start: V) extends UndirectedPaths[V](graph, start) {
-	
-	var count: Int = 0
-	
-	dfs(graph, start)
-	
-	def dfs(graph: Graph[V], vertex: V): Unit = {
-		marked(vertex, true)
-		count = count + 1
-		graph.adj(start).foreach{ w =>
-			if (!marked(w)) {
-				dfs(graph, w)
-			}
-		}
-	}
-	
+
+  var count: Int = 0
+
+  dfs(graph, start)
+
+  def dfs(graph: Graph[V], vertex: V): Unit = {
+    marked(vertex, true)
+    count = count + 1
+    graph.adj(start).foreach{ w =>
+      if (!marked(w)) {
+        dfs(graph, w)
+      }
+    }
+  }
+
 }
 
 class DepthFirstPaths[V](graph: Graph[V], start: V) extends UndirectedEdges[V](graph, start) {
-	
-	dfs(graph, start)
-	
-	private def dfs(graph: Graph[V], vertex: V): Unit = {
-		marked(vertex, true)
-		graph.adj(vertex).foreach{ w =>
-			if (!marked(w)) {
-				addEdgeTo(w, vertex)
-				dfs(graph, w)
-			}
-		}
-	}
+
+  dfs(graph, start)
+
+  private def dfs(graph: Graph[V], vertex: V): Unit = {
+    marked(vertex, true)
+    graph.adj(vertex).foreach{ w =>
+      if (!marked(w)) {
+        addEdgeTo(w, vertex)
+        dfs(graph, w)
+      }
+    }
+  }
 }
 
 class BreadthFirstPaths[V](graph: Graph[V], start: V) extends UndirectedEdges[V](graph, start) {
-	
-	bfs(graph, start)
-	
-	private def bfs(graph: Graph[V], vertex: V): Unit = {
-		
-		var queue = Queue[V]()
-		marked(vertex, true)
-		queue.enqueue(vertex)
-		while (!queue.isEmpty) {
-			val v = queue.dequeue()
-			graph.adj(v).foreach { w =>
-				if (!marked(w)) {
-					addEdgeTo(w,v)
-					marked(w, true)
-					queue.enqueue(w)
-				}
-			}
-		}
-	}
+
+  bfs(graph, start)
+
+  private def bfs(graph: Graph[V], vertex: V): Unit = {
+
+    var queue = Queue[V]()
+    marked(vertex, true)
+    queue.enqueue(vertex)
+    while (!queue.isEmpty) {
+      val v = queue.dequeue()
+      graph.adj(v).foreach { w =>
+        if (!marked(w)) {
+          addEdgeTo(w,v)
+          marked(w, true)
+          queue.enqueue(w)
+        }
+      }
+    }
+  }
 }
 
 
 class ConnectedComponents[V](graph: Graph[V], start: V) extends UndirectedEdges[V](graph, start) {
 
-	protected var idMap = MMap[V,Int]()
-	var count: Int = 0
-	
-	setUp()
-	
-	private def setUp(): Unit = {
-		graph.vertices.foreach{ vertex =>
-			if (!marked(vertex)) {
-				dfs(graph, vertex)
-				count = count + 1
-			}
-		}
-	}
-	
-	protected def count(vertex: V, count: Int): Unit = {
-		idMap = idMap + (vertex -> count)
-	}
-	
-	def id(vertex: V): Int = {
-		idMap.getOrElse(vertex, -1)
-	}
-	
-	private def dfs(graph: Graph[V], vertex: V): Unit = {
-		marked(vertex, true)
-		count(vertex, count)
-		graph.adj(vertex).foreach { w =>
-			if (!marked(w)) {
-				dfs(graph, w)
-			}
-		}
-	}
+  protected var idMap = MMap[V,Int]()
+  var count: Int = 0
 
-	def connected(thiz: V, that: V): Boolean = {
-		id(thiz) == id(that)
-	}
+  setUp()
+
+  private def setUp(): Unit = {
+    graph.vertices.foreach{ vertex =>
+      if (!marked(vertex)) {
+        dfs(graph, vertex)
+        count = count + 1
+      }
+    }
+  }
+
+  protected def count(vertex: V, count: Int): Unit = {
+    idMap = idMap + (vertex -> count)
+  }
+
+  def id(vertex: V): Int = {
+    idMap.getOrElse(vertex, -1)
+  }
+
+  private def dfs(graph: Graph[V], vertex: V): Unit = {
+    marked(vertex, true)
+    count(vertex, count)
+    graph.adj(vertex).foreach { w =>
+      if (!marked(w)) {
+        dfs(graph, w)
+      }
+    }
+  }
+
+  def connected(thiz: V, that: V): Boolean = {
+    id(thiz) == id(that)
+  }
 }
 
 /*
@@ -158,29 +157,29 @@ class ConnectedComponents[V](graph: Graph[V], start: V) extends UndirectedEdges[
  * no self-loops or parallel edges
  */
 class AcyclicDetection[V](graph: Graph[V], start: V) extends UndirectedEdges[V](graph, start) {
-	var hasCycle: Boolean = false
+  var hasCycle: Boolean = false
 
-	setUp()
-	
-	private def setUp(): Unit = {
-		graph.vertices.foreach{ s =>
-			if (!marked(s)) {
-				dfs(graph, s, s)
-			}
-		}
-	}
-	private def dfs(graph: Graph[V], v: V, u: V): Unit = {
-		marked(v, true)
-		// change this recursion so that it terminates when hasCycle = true
-		graph.adj(v).foreach { w =>
-			if (!marked(w)) {
-				dfs(graph, w, v)
-			} else if (w != u) {
-				hasCycle = true
-			}
-		}
-	}
-	
+  setUp()
+
+  private def setUp(): Unit = {
+    graph.vertices.foreach{ s =>
+      if (!marked(s)) {
+        dfs(graph, s, s)
+      }
+    }
+  }
+  private def dfs(graph: Graph[V], v: V, u: V): Unit = {
+    marked(v, true)
+    // change this recursion so that it terminates when hasCycle = true
+    graph.adj(v).foreach { w =>
+      if (!marked(w)) {
+        dfs(graph, w, v)
+      } else if (w != u) {
+        hasCycle = true
+      }
+    }
+  }
+
 }
 
 /*
@@ -189,43 +188,43 @@ class AcyclicDetection[V](graph: Graph[V], start: V) extends UndirectedEdges[V](
  * no edge connects vertices of the same color.
  */
 class BipartiteDetection[V](graph: Graph[V], start: V) extends UndirectedEdges[V](graph, start) {
-	var isTwoColorable: Boolean = true
-	var colorMap = MMap[V, Boolean]()
-	
-	setUp()
-	
-	private def setUp(): Unit = {
-		graph.vertices.foreach{ s =>
-			if (!marked(s)) {
-				dfs(graph, s)
-			}
-		}
-	}
-	
-	
-	protected def color(vertex: V, colored: Boolean): Unit = {
-		colorMap = colorMap + (vertex -> colored)
-	}
-	
-	def color(vertex: V): Boolean = {
-		colorMap.getOrElse(vertex, false)
-	}
-	
-	private def dfs(graph: Graph[V], v: V): Unit = {
-		marked(v, true)
-		// change this recursion so that it terminates when isTwoColorable = true
-		graph.adj(v).foreach { w =>
-			if (!marked(w)) {
-				val newColor = !color(v)
-				color(w, newColor)
-				dfs(graph, w)
-			} else if (color(w) == color(v)) {
-				isTwoColorable = false
-			}
-		}
-	}
-	
-	def isBipartite: Boolean = isTwoColorable
+  var isTwoColorable: Boolean = true
+  var colorMap = MMap[V, Boolean]()
+
+  setUp()
+
+  private def setUp(): Unit = {
+    graph.vertices.foreach{ s =>
+      if (!marked(s)) {
+        dfs(graph, s)
+      }
+    }
+  }
+
+
+  protected def color(vertex: V, colored: Boolean): Unit = {
+    colorMap = colorMap + (vertex -> colored)
+  }
+
+  def color(vertex: V): Boolean = {
+    colorMap.getOrElse(vertex, false)
+  }
+
+  private def dfs(graph: Graph[V], v: V): Unit = {
+    marked(v, true)
+    // change this recursion so that it terminates when isTwoColorable = true
+    graph.adj(v).foreach { w =>
+      if (!marked(w)) {
+        val newColor = !color(v)
+        color(w, newColor)
+        dfs(graph, w)
+      } else if (color(w) == color(v)) {
+        isTwoColorable = false
+      }
+    }
+  }
+
+  def isBipartite: Boolean = isTwoColorable
 }
 
 

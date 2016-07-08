@@ -1,8 +1,7 @@
 package org.awong.context
 
 package object reductions {
-	object AssignmentProblem
-	object BipartiteMatching
-	object Simplex
-
+  object AssignmentProblem
+  object BipartiteMatching
+  object Simplex
 }
