@@ -93,12 +93,18 @@ trait ResourceLoaderLike { this: org.awong.Logging =>
   def resourceAsStrings(filename: String): Seq[String] = {
     val maybeSource = resourceAsSource(filename)
     maybeSource match {
-      case None => Seq[String]()
+      case None => {
+        println(s"failed to load resource $filename as source")
+        Seq[String]()
+      }
       case Some(source) =>
         val tryStrings = readSource(source)(_.getLines.toIndexedSeq)
         tryStrings match {
           case Success(seq) => seq
-          case Failure(_) => Seq[String]()
+          case Failure(_) => {
+            println(s"failed to get lines from $filename as sequence")
+            Seq[String]()
+          }
         }
     }
   }
